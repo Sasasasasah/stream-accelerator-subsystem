@@ -1,17 +1,55 @@
 # Integration Contract
 
-## MEM ↔ SRF
+## MEM-SRF Integration
 
-MEM read output 连接 SRF producer slot0；MEM write consume 连接 SRF consumer slot0。MEM segment、SRF superlane 和数据 packing 均为 64 bit。segment valid 仅在全部 8 个 lane valid 时有效。
+MEM read output connects to SRF local producer slot 0. MEM write consumption connects to SRF local consumer slot 0. MEM uses SRF boundary state as the stream-facing write input.
 
-## SRF ↔ SXM
+## SRF-SXM Integration
 
-SXM 从 SRF boundary 读取 data、valid、direction、stream 与 selector，并通过 consumer slot1 提交 consume。SXM output 以 producer slot1 写回 SRF。East read 使用 sreg14，West read 使用 sreg15。
+SXM reads data, valid, direction, stream, and selector information from an SRF boundary. SXM consumption is issued through local consumer slot 1. Transformed output returns to SRF through local producer slot 1.
 
-## Data and Control Fields
+East SXM reads use sreg14. West SXM reads use sreg15.
 
-每个 segment 由 8 个 8-bit lane 组成：lane0 对应 `data[7:0]`，lane7 对应 `data[63:56]`。direction 选择 East/West propagation；selector 标识 stream、superlane 与 boundary 位置。consume 成功后清除对应 valid，避免 passive propagation。
+## Slot Mapping
 
-## Integration Rule
+| Function | SRF Slot |
+| --- | --- |
+| MEM read producer | slot 0 |
+| MEM write consumer | slot 0 |
+| SXM output producer | slot 1 |
+| SXM input consumer | slot 1 |
 
-integration glue 是 0-cycle combinational mapping。SRF 维持 static scheduling；当前 contract 不包含 valid-ready、backpressure、retry/replay 或动态 arbitration。
+## Data Packing
+
+One segment contains eight 8-bit lanes and is packed into 64 bits.
+
+| Lane | Data Bits |
+| --- | --- |
+| lane0 | `data[7:0]` |
+| lane1 | `data[15:8]` |
+| lane2 | `data[23:16]` |
+| lane3 | `data[31:24]` |
+| lane4 | `data[39:32]` |
+| lane5 | `data[47:40]` |
+| lane6 | `data[55:48]` |
+| lane7 | `data[63:56]` |
+
+Segment valid requires the lane-valid condition defined by the current integration contract. A partial lane-valid segment is not treated as a fully valid segment.
+
+## Valid and Consume Semantics
+
+Data and valid propagate together through SRF. A successful consumer request clears the valid state for the consumed segment so that it does not continue passive propagation.
+
+## Cycle Contract
+
+Integration glue is a 0-cycle combinational mapping. It introduces no extra pipeline stage. Producer candidates are committed by the SRF cycle model, and committed stream data moves one SR column per cycle in the selected direction.
+
+## End-to-End Path
+
+The full loopback path is:
+
+```text
+MEM read -> slot 0 -> SRF -> SXM -> slot 1 -> SRF -> Consumer
+```
+
+The integration contract does not introduce additional flow-control, recovery, or scheduling mechanisms.

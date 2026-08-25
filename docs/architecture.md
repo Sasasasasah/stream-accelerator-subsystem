@@ -1,21 +1,38 @@
 # Architecture
 
-## 总体数据路径
+## System Overview
 
-系统主路径为 `MEM -> SRF -> SXM -> SRF -> Consumer`。MEM 读结果以 producer candidate 进入 SRF；SRF 将数据沿固定方向传播至 SXM input boundary；SXM 完成 stream transform 后，经 producer candidate 返回 SRF，再由 downstream consumer 使用。
+The subsystem data path is:
+
+```text
+MEM -> SRF -> SXM -> SRF -> Consumer
+```
+
+MEM read results enter SRF as producer candidates. SRF propagates stream data to an SXM input boundary. SXM transforms the received stream segment and returns a producer candidate to SRF for downstream consumption.
 
 ## SRF Topology
 
-SRF 使用 `leaf -> column -> fabric` hierarchy。leaf 是唯一的 data/valid state holder；column 是无状态结构 wrapper；fabric 提供固定延迟的 East/West directional propagation。该结构是 static scheduled，数据到达时刻由固定 pipeline 决定。
+SRF uses a `leaf -> column -> fabric` hierarchy. A leaf is the only holder of data and valid state. A column is a stateless structural wrapper. The fabric connects registered columns into fixed-latency directional pipelines.
+
+East traffic propagates from lower to higher column indices; West traffic propagates in the opposite direction. Each registered SR column contributes one propagation cycle. The fabric is statically scheduled, so movement follows the configured cycle model.
 
 ## MEM Attachment
 
-MEM 的 64-bit segment 与 SRF 一个 superlane 对齐。MEM 作为 slot0 producer 提供 read result，并作为 slot0 consumer 消费写入数据。MEM 使用 SRF boundary state 作为写入侧输入。
+MEM is attached to SRF through local producer/consumer slot 0. MEM read operations produce 64-bit stream segments, while MEM write operations consume segments observed at the SRF boundary. A MEM segment maps to one SRF superlane.
 
 ## SXM Attachment
 
-SXM 作为 SRF consumer 读取 input boundary，并作为 slot1 producer 将 transpose/permute 结果写回 SRF。SXM East input 对应 sreg14，West input 对应 sreg15。
+SXM consumes stream segments from SRF and returns transformed segments through local producer/consumer slot 1. SXM supports transpose and permute operations. The East SXM input reads sreg14, and the West SXM input reads sreg15.
 
-## Cycle-level Data Flow
+## Producer and Consumer Slots
 
-integration glue 为 0-cycle combinational mapping。每个 SRF registered column 提供一个固定 propagation stage；MEM/SXM 仅通过既有 producer/consumer contract 连接，不引入 arbitration、scheduler、backpressure 或 retry/replay。
+| Slot | Owner | Role |
+| --- | --- | --- |
+| slot 0 | MEM | Read producer and write consumer |
+| slot 1 | SXM | Transform producer and input consumer |
+
+The slot assignment is static. The integration layer does not implement dynamic slot allocation or arbitration.
+
+## Cycle-Level Data Movement
+
+Integration adapters are combinational and add no pipeline stage. Producer candidates are committed according to the SRF cycle model. Once committed, stream data advances one registered SR column per cycle in the selected direction. Consumer requests clear the corresponding valid state after successful consumption.

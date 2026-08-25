@@ -1,65 +1,95 @@
 # Stream Accelerator Subsystem
 
-## 项目简介
+## Overview
 
-本项目实现一个基于 Stream Register Fabric (SRF) 的 stream-based accelerator subsystem prototype。系统由 Stream Register Fabric (SRF)、Memory Subsystem (MEM) 与 Stream Transformation Engine (SXM) 组成，并通过 RTL、CModel 和 End-to-End (E2E) Testbench 验证完整数据路径。
+This repository implements a stream-based accelerator subsystem prototype built around a Stream Register Fabric (SRF). The subsystem integrates a Stream Register Fabric (SRF), a Memory Subsystem (MEM), and a Stream Transformation Engine (SXM).
 
-## Architecture Overview
+The design is implemented in RTL and accompanied by C++ reference models, module-level testbenches, subsystem integration tests, and end-to-end regression.
+
+## Architecture
 
 ```text
-MEM -> SRF -> SXM -> SRF -> Consumer
+MEM
+ |
+ v
+SRF
+ |
+ v
+SXM
+ |
+ v
+SRF
+ |
+ v
+Consumer
 ```
 
-MEM 使用 producer/consumer slot0；SXM 使用 producer/consumer slot1。SRF 是 static-scheduled stream fabric，提供 deterministic directional propagation，不使用 valid-ready、backpressure 或 retry/replay。
+MEM accesses SRF through local producer/consumer slot 0. SXM accesses SRF through local producer/consumer slot 1. SRF is a statically scheduled stream fabric with deterministic directional propagation.
 
-## Key Features
+## Components
 
-- Multi-column Stream Register Fabric
-- Directional stream propagation
-- Memory producer / consumer integration
-- Stream transpose / permute engine
-- Multi-slot local producer / consumer access
-- Cycle-level deterministic behavior
-- RTL / CModel co-verification
-- End-to-End regression
+### Stream Register Fabric (SRF)
+
+- Multi-column stream register fabric
+- East/West directional propagation
+- Local producer and consumer access
+- Deterministic cycle-by-cycle movement
+- Static scheduling
+
+### Memory Subsystem (MEM)
+
+- Stream-facing memory subsystem
+- Read operations produce stream data through slot 0
+- Write operations consume stream data through slot 0
+
+### Stream Transformation Engine (SXM)
+
+- Consumes stream segments from SRF
+- Performs transpose and permute operations
+- Writes transformed data back to SRF through slot 1
+
+## Data Flow
+
+MEM read results enter SRF as producer candidates. SRF propagates the stream toward the SXM input boundary. SXM consumes a segment, transforms it, and returns the result to SRF as a producer candidate for downstream consumption.
+
+The integration glue is combinational and adds no pipeline cycle. It does not make the subsystem zero-latency: SRF propagation still follows its registered column-by-column cycle model.
+
+## Verification
+
+| Verification Level | Status |
+| --- | --- |
+| SRF standalone | PASS |
+| MEM standalone | PASS |
+| SXM standalone | PASS |
+| SRF + MEM integration | PASS |
+| SRF + SXM integration | PASS |
+| SRF + MEM + SXM combined integration | PASS |
+| MEM → SRF → SXM input boundary | PASS |
+| SXM → SRF output boundary | PASS |
+| MEM → SRF → SXM → SRF full loopback E2E | PASS |
 
 ## Repository Structure
 
 ```text
-rtl/       SRF, MEM, SXM and integration RTL
+rtl/       SRF, MEM, SXM, and integration RTL
 cmodel/    C++ reference models grouped by subsystem
-tb/        Standalone, integration and E2E Testbench sources
-scripts/   System combined and full loopback Regression entry points
-docs/      Architecture, interface integration and verification notes
+tb/        Standalone, integration, and E2E testbenches
+scripts/   Combined-system and full-loopback regression entry points
+docs/      Architecture, integration, and verification notes
 ```
-
-## Verification
-
-已通过以下 Regression：
-
-- SRF standalone — PASS
-- MEM standalone — PASS
-- SXM standalone — PASS
-- SRF + MEM integration — PASS
-- SRF + SXM integration — PASS
-- SRF + MEM + SXM combined integration — PASS
-- MEM → SRF → SXM input boundary — PASS
-- SXM → SRF output boundary — PASS
-- MEM → SRF → SXM → SRF Full Loopback E2E — PASS
 
 ## Quick Start
 
-环境：Windows、Icarus Verilog (`iverilog` / `vvp`)；CModel 使用 C++ compiler。
+The project is intended for Windows with Icarus Verilog (`iverilog` and `vvp`). C++ reference models require a C++ compiler.
 
-在工程根目录运行：
-
-```bat
-scripts\run_srf_mem_sxm_regression.bat
-scripts\run_mem_srf_sxm_loopback_e2e.bat
-```
-
-或运行聚合入口：
+Run the combined integration and full loopback E2E regression from the repository root:
 
 ```bat
 scripts\run_personal_regression.bat
+```
+
+The script runs the combined integration regression and the full loopback E2E regression, then prints:
+
+```text
+STREAM_ACCELERATOR_SUBSYSTEM TEST_PASS
 ```
