@@ -1,0 +1,12 @@
+sim/
+build/
+*.vvp
+*.vcd
+*.fst
+*.log
+*.exe
+*.o
+*.obj
+*.tmp
+*.pyc
+__pycache__/
