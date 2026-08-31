@@ -48,7 +48,7 @@ module tb_sr_column_compliance;
         end
     endfunction
 
-    ftlpu_sr_column_dir dut (
+    stream_sr_column_dir dut (
         .clk_i(clk),
         .rst_ni(rst_ni),
         .column_data_in(column_data_in),

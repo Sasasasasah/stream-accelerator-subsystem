@@ -18,7 +18,7 @@ module tb_sr_leaf_semantic;
     wire invalid_consume_o;
     integer errors;
 
-    ftlpu_sr_superlane_col_dir #(
+    stream_sr_superlane_col_dir #(
         .P_STREAMS_PER_DIR(1),
         .P_LANES_PER_SUPERLANE(1),
         .P_SR_DATA_BITS(8),

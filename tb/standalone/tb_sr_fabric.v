@@ -38,7 +38,7 @@ module tb_sr_fabric;
     wire [PATH_NUM*DIRECTION_STATE_CELLS*DATA_BITS-1:0] state_data_out;
     wire [PATH_NUM*DIRECTION_STATE_CELLS-1:0] state_valid_out;
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .P_HEMISPHERES(HEMISPHERE_NUM),
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),

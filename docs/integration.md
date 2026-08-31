@@ -8,7 +8,7 @@ MEM read output connects to SRF local producer slot 0. MEM write consumption con
 
 SXM reads data, valid, direction, stream, and selector information from an SRF boundary. SXM consumption is issued through local consumer slot 1. Transformed output returns to SRF through local producer slot 1.
 
-East SXM reads use sreg14. West SXM reads use sreg15.
+In the current prototype topology, East SXM reads use attachment column 14 and West SXM reads use attachment column 15. These are configuration-specific attachment points rather than generic SRF requirements.
 
 ## Slot Mapping
 

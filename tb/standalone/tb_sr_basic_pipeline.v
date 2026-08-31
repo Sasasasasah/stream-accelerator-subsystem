@@ -19,7 +19,7 @@ module tb_sr_basic_pipeline;
     wire [VALID_WIDTH-1:0] stream_valid_out;
     integer errors;
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),

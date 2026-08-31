@@ -45,7 +45,7 @@ module tb_sr_hemisphere_fabric;
     wire [STATE_CELLS*DATA_BITS-1:0]    west_state_data;
     wire [STATE_CELLS-1:0]              west_state_valid;
 
-    ftlpu_sr_hemisphere_fabric #(
+    stream_sr_hemisphere_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),

@@ -3,7 +3,7 @@
 // One hemisphere contains two physically independent, fixed-topology
 // direction fabrics. This wrapper distributes parameters/clock/reset and
 // lifts port dimensions; it owns no payload, valid, command, or access state.
-module ftlpu_sr_hemisphere_fabric #(
+module stream_sr_hemisphere_fabric #(
     parameter SR_COLUMNS_PER_HEMI       = 16,
     parameter P_SUPERLANES_PER_COLUMN   = 4,
     parameter P_STREAMS_PER_DIR         = 32,
@@ -44,7 +44,7 @@ module ftlpu_sr_hemisphere_fabric #(
     output wire hemisphere_invalid_consume
 );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI       (SR_COLUMNS_PER_HEMI),
         .P_SUPERLANES_PER_COLUMN   (P_SUPERLANES_PER_COLUMN),
         .P_STREAMS_PER_DIR         (P_STREAMS_PER_DIR),
@@ -69,7 +69,7 @@ module ftlpu_sr_hemisphere_fabric #(
         .state_valid_out(east_state_valid)
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI       (SR_COLUMNS_PER_HEMI),
         .P_SUPERLANES_PER_COLUMN   (P_SUPERLANES_PER_COLUMN),
         .P_STREAMS_PER_DIR         (P_STREAMS_PER_DIR),

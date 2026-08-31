@@ -41,7 +41,7 @@ module tb_sr_hop_trace;
     assign state_data_out = direction ? west_state_data_out : east_state_data_out;
     assign state_valid_out = direction ? west_state_valid_out : east_state_valid_out;
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .P_SR_HOP_CYCLES(P_SR_HOP_CYCLES), .DIRECTION(0)
     ) dut_east (
         .clk_i(clk), .rst_ni(rst_ni),
@@ -55,7 +55,7 @@ module tb_sr_hop_trace;
         .state_valid_out(east_state_valid_out)
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .P_SR_HOP_CYCLES(P_SR_HOP_CYCLES), .DIRECTION(1)
     ) dut_west (
         .clk_i(clk), .rst_ni(rst_ni),

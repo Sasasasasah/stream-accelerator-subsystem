@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
-// Repeatable elaboration audit for FTLPU_DEFAULT_4T8L. No parameter override
-// is applied to ftlpu_sr_fabric in this test.
+// Repeatable elaboration audit for STREAM_ACCEL_DEFAULT_4T8L. No parameter override
+// is applied to stream_sr_fabric in this test.
 module tb_sr_default_profile;
     localparam HEMISPHERE_NUM = 2;
     localparam DIRECTION_NUM = 2;
@@ -37,7 +37,7 @@ module tb_sr_default_profile;
     wire [STATE_VALID_WIDTH-1:0] state_valid_out;
     integer errors;
 
-    ftlpu_sr_fabric dut (
+    stream_sr_fabric dut (
         .clk_i(clk), .rst_ni(~rst),
         .boundary_input_data(boundary_input_data),
         .boundary_input_valid(boundary_input_valid),

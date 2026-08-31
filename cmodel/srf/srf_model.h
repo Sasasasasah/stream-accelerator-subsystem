@@ -17,7 +17,7 @@ enum class Hemisphere {
 };
 
 struct Command {
-    // NON-SPEC EXTENSION command representation retained for legacy tests.
+    // Optional prototype command representation retained for legacy tests.
     std::uint8_t opcode;
     std::uint8_t column;
     std::uint8_t superlane;
@@ -82,7 +82,7 @@ public:
     std::size_t stream_num() const;
     std::size_t lane_num() const;
 
-    // NON-SPEC EXTENSION command/direct-write APIs. Core cycle behavior does
+    // Optional prototype command/direct-write APIs. Core cycle behavior does
     // not call these methods and remains usable through inject/consume/step.
     CommandResult execute(Command command);
 
@@ -176,7 +176,7 @@ public:
                       std::uint8_t superlane,
                       std::uint8_t stream,
                       std::uint8_t lane);
-    // NON-SPEC EXTENSION helper retained outside the core propagation path.
+    // Optional prototype helper retained outside the core propagation path.
     bool write_cell(Direction direction,
                     std::uint8_t column,
                     std::uint8_t superlane,
@@ -245,7 +245,7 @@ public:
                       std::uint8_t superlane,
                       std::uint8_t stream,
                       std::uint8_t lane);
-    // NON-SPEC EXTENSION helper retained for compatibility regression.
+    // Optional prototype helper retained for compatibility regression.
     bool write_cell(Hemisphere hemisphere,
                     Direction direction,
                     std::uint8_t column,

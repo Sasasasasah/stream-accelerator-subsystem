@@ -1,58 +1,49 @@
 # Stream Accelerator Subsystem
 
-## Overview
+## What Is This?
 
-This repository implements a stream-based accelerator subsystem prototype built around a Stream Register Fabric (SRF). The subsystem integrates a Stream Register Fabric (SRF), a Memory Subsystem (MEM), and a Stream Transformation Engine (SXM).
-
-The design is implemented in RTL and accompanied by C++ reference models, module-level testbenches, subsystem integration tests, and end-to-end regression.
+A self-contained RTL and C++ reference-model prototype of a stream-oriented accelerator subsystem. It integrates a Stream Register Fabric (SRF), a stream-facing Memory Subsystem (MEM), and a Stream Transformation Engine (SXM) through fixed-cycle producer/consumer interfaces. The project focuses on cycle-accurate data movement, explicit state ownership, and self-checking integration verification rather than production accelerator implementation.
 
 ## Architecture
 
 ```text
-MEM
- |
- v
+MEM Read
+   |
+   v  producer slot 0
 SRF
- |
- v
+   |
+   v  fixed-cycle stream propagation
 SXM
- |
- v
+   |
+   v  producer slot 1
 SRF
- |
- v
+   |
+   v
 Consumer
 ```
 
-MEM accesses SRF through local producer/consumer slot 0. SXM accesses SRF through local producer/consumer slot 1. SRF is a statically scheduled stream fabric with deterministic directional propagation.
+SRF is a statically scheduled stream fabric with deterministic East/West propagation. MEM accesses SRF through local producer/consumer slot 0. SXM consumes input segments and returns transformed segments through local producer/consumer slot 1. Integration glue is combinational and adds no pipeline stage; registered SRF columns retain the cycle-by-cycle latency model.
 
-## Components
+## What Is Implemented?
 
 ### Stream Register Fabric (SRF)
 
-- Multi-column stream register fabric
+- Multi-column `leaf -> column -> fabric` hierarchy
 - East/West directional propagation
 - Local producer and consumer access
-- Deterministic cycle-by-cycle movement
-- Static scheduling
+- Deterministic cycle-by-cycle movement under static scheduling
 
 ### Memory Subsystem (MEM)
 
-- Stream-facing memory subsystem
-- Read operations produce stream data through slot 0
-- Write operations consume stream data through slot 0
+- Stream-facing read and write interfaces
+- 64-bit segment producer/consumer integration through slot 0
+- Logical-bank, slice, group, hemisphere, and full-MEM hierarchy
 
 ### Stream Transformation Engine (SXM)
 
-- Consumes stream segments from SRF
-- Performs transpose and permute operations
-- Writes transformed data back to SRF through slot 1
-
-## Data Flow
-
-MEM read results enter SRF as producer candidates. SRF propagates the stream toward the SXM input boundary. SXM consumes a segment, transforms it, and returns the result to SRF as a producer candidate for downstream consumption.
-
-The integration glue is combinational and adds no pipeline cycle. It does not make the subsystem zero-latency: SRF propagation still follows its registered column-by-column cycle model.
+- Stream segment consumption and transformed-segment production
+- Transpose and permute operations
+- Slot 1 integration with SRF
 
 ## Verification
 
@@ -64,9 +55,31 @@ The integration glue is combinational and adds no pipeline cycle. It does not ma
 | SRF + MEM integration | PASS |
 | SRF + SXM integration | PASS |
 | SRF + MEM + SXM combined integration | PASS |
-| MEM → SRF → SXM input boundary | PASS |
-| SXM → SRF output boundary | PASS |
-| MEM → SRF → SXM → SRF full loopback E2E | PASS |
+| MEM -> SRF -> SXM input boundary | PASS |
+| SXM -> SRF output boundary | PASS |
+| MEM -> SRF -> SXM -> SRF full loopback E2E | PASS |
+
+## Quick Start
+
+The RTL regression is intended for Windows with Icarus Verilog (`iverilog` and `vvp`). From the repository root, run:
+
+```bat
+scripts\run_personal_regression.bat
+```
+
+The script runs the combined integration regression and the full-loopback E2E regression, then prints:
+
+```text
+STREAM_ACCELERATOR_SUBSYSTEM TEST_PASS
+```
+
+C++ reference models are included under `cmodel/` for architectural cross-checking. This repository currently provides no single public CModel regression entry point.
+
+## Documentation
+
+- [Architecture](docs/architecture.md)
+- [Integration Contract](docs/integration.md)
+- [Verification Notes](docs/verification.md)
 
 ## Repository Structure
 
@@ -78,18 +91,10 @@ scripts/   Combined-system and full-loopback regression entry points
 docs/      Architecture, integration, and verification notes
 ```
 
-## Quick Start
+## Scope / Non-Goals
 
-The project is intended for Windows with Icarus Verilog (`iverilog` and `vvp`). C++ reference models require a C++ compiler.
+This is an RTL/C++ architecture prototype for statically scheduled stream movement, MEM/SRF/transpose-permute integration, and self-checking verification. It is not a production accelerator, ISA or software stack, physical-design implementation, timing-closure project, tapeout-ready IP, or production protocol implementation.
 
-Run the combined integration and full loopback E2E regression from the repository root:
+## Relationship to Standalone Repositories
 
-```bat
-scripts\run_personal_regression.bat
-```
-
-The script runs the combined integration regression and the full loopback E2E regression, then prints:
-
-```text
-STREAM_ACCELERATOR_SUBSYSTEM TEST_PASS
-```
+This repository is a self-contained integration snapshot of the SRF, memory, and transpose/permute blocks used for subsystem-level verification. Standalone repositories focus on individual blocks; this repository focuses on integration and end-to-end behavior. It intentionally does not use Git submodules.

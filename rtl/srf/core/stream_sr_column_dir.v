@@ -2,7 +2,7 @@
 
 // A column is a structural wrapper around independent superlane leaves.
 // It deliberately contains no registers or cross-superlane behavior.
-module ftlpu_sr_column_dir #(
+module stream_sr_column_dir #(
     parameter P_SUPERLANES_PER_COLUMN = 4,
     parameter P_STREAMS_PER_DIR       = 32,
     parameter P_LANES_PER_SUPERLANE   = 8,
@@ -35,7 +35,7 @@ module ftlpu_sr_column_dir #(
     genvar superlane;
     generate
         for (superlane = 0; superlane < P_SUPERLANES_PER_COLUMN; superlane = superlane + 1) begin : g_superlane_leaf
-            ftlpu_sr_superlane_col_dir #(
+            stream_sr_superlane_col_dir #(
                 .P_STREAMS_PER_DIR      (P_STREAMS_PER_DIR),
                 .P_LANES_PER_SUPERLANE  (P_LANES_PER_SUPERLANE),
                 .P_SR_DATA_BITS         (P_SR_DATA_BITS),

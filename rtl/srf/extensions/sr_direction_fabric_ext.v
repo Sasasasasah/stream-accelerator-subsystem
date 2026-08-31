@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-// NON-SPEC EXTENSION adapter. It preserves the development-time command and
+// OPTIONAL PROTOTYPE EXTENSION adapter. It preserves the development-time command and
 // direct-access interface without adding ports or state to the SRF core.
 // Writes become an extra local producer; reads select the core state outputs.
 module sr_direction_fabric_ext #(
@@ -198,7 +198,7 @@ module sr_direction_fabric_ext #(
         end
     endgenerate
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM), .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM), .P_LANES_PER_SUPERLANE(LANE_NUM), .P_SR_DATA_BITS(DATA_BITS),
         .P_SR_HOP_CYCLES(P_SR_HOP_CYCLES),
@@ -216,7 +216,7 @@ module sr_direction_fabric_ext #(
         .state_data_out(east_state_data), .state_valid_out(east_state_valid)
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM), .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM), .P_LANES_PER_SUPERLANE(LANE_NUM), .P_SR_DATA_BITS(DATA_BITS),
         .P_SR_HOP_CYCLES(P_SR_HOP_CYCLES),

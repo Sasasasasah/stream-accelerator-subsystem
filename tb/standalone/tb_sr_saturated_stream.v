@@ -28,7 +28,7 @@ module tb_sr_saturated_stream;
     integer input_cycle;
     integer drain_cycle;
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .P_HEMISPHERES(2), .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM), .P_STREAMS_PER_DIR(STREAM_NUM),
         .P_LANES_PER_SUPERLANE(LANE_NUM), .P_SR_DATA_BITS(DATA_BITS),

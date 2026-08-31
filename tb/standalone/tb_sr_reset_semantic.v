@@ -19,7 +19,7 @@ module tb_sr_reset_semantic;
     wire [PATH_NUM*COLUMN_NUM-1:0] fabric_state_valid;
     integer errors;
 
-    ftlpu_sr_superlane_col_dir #(
+    stream_sr_superlane_col_dir #(
         .P_STREAMS_PER_DIR(1), .P_LANES_PER_SUPERLANE(1), .P_SR_DATA_BITS(8),
         .P_LOCAL_PRODUCERS(1), .P_LOCAL_CONSUMERS(1)
     ) u_leaf (
@@ -33,7 +33,7 @@ module tb_sr_reset_semantic;
         .collision_o(), .invalid_consume_o()
     );
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM), .P_SUPERLANES_PER_COLUMN(1),
         .P_STREAMS_PER_DIR(1), .P_LANES_PER_SUPERLANE(1),
         .P_LOCAL_PRODUCERS(1), .P_LOCAL_CONSUMERS(1)

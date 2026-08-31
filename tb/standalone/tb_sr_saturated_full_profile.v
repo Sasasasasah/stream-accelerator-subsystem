@@ -48,7 +48,7 @@ module tb_sr_saturated_full_profile;
         end
     endfunction
 
-    ftlpu_sr_fabric dut (
+    stream_sr_fabric dut (
         .clk_i(clk), .rst_ni(rst_ni),
         .boundary_input_data(boundary_input_data),
         .boundary_input_valid(boundary_input_valid),

@@ -7,11 +7,11 @@ if not exist sim mkdir sim
 echo RUN_STAGE RTL_SRF_MEM_SXM_COMBINED
 iverilog -g2012 -Wall -s tb_srf_mem_sxm_integration ^
   -o sim\tb_srf_mem_sxm_integration.vvp ^
-  rtl\srf\core\ftlpu_sr_superlane_col_dir.v ^
-  rtl\srf\core\ftlpu_sr_column_dir.v ^
-  rtl\srf\core\ftlpu_sr_direction_fabric.v ^
-  rtl\srf\core\ftlpu_sr_hemisphere_fabric.v ^
-  rtl\srf\core\ftlpu_sr_fabric.v ^
+  rtl\srf\core\stream_sr_superlane_col_dir.v ^
+  rtl\srf\core\stream_sr_column_dir.v ^
+  rtl\srf\core\stream_sr_direction_fabric.v ^
+  rtl\srf\core\stream_sr_hemisphere_fabric.v ^
+  rtl\srf\core\stream_sr_fabric.v ^
   rtl\mem\mem_bank_superlane_leaf.v ^
   rtl\mem\mem_bank_control_column.v ^
   rtl\mem\mem_logical_bank_column.v ^

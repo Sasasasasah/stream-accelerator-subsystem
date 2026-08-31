@@ -241,7 +241,7 @@ module srf_mem_integration_top #(
     assign srf_inject_valid = srf_inject_valid_comb;
     assign srf_inject_data = srf_inject_data_comb;
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .P_HEMISPHERES(2),
         .SR_COLUMNS_PER_HEMI(16),
         .P_SUPERLANES_PER_COLUMN(4),

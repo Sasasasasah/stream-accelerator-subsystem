@@ -7,11 +7,11 @@ if not exist sim mkdir sim
 echo RUN_STAGE MEM_SRF_SXM_LOOPBACK_E2E
 iverilog -g2012 -Wall -s tb_mem_srf_sxm_loopback_e2e ^
   -o sim\tb_mem_srf_sxm_loopback_e2e.vvp ^
-  rtl\srf\core\ftlpu_sr_superlane_col_dir.v ^
-  rtl\srf\core\ftlpu_sr_column_dir.v ^
-  rtl\srf\core\ftlpu_sr_direction_fabric.v ^
-  rtl\srf\core\ftlpu_sr_hemisphere_fabric.v ^
-  rtl\srf\core\ftlpu_sr_fabric.v ^
+  rtl\srf\core\stream_sr_superlane_col_dir.v ^
+  rtl\srf\core\stream_sr_column_dir.v ^
+  rtl\srf\core\stream_sr_direction_fabric.v ^
+  rtl\srf\core\stream_sr_hemisphere_fabric.v ^
+  rtl\srf\core\stream_sr_fabric.v ^
   rtl\mem\mem_bank_superlane_leaf.v ^
   rtl\mem\mem_bank_control_column.v ^
   rtl\mem\mem_logical_bank_column.v ^

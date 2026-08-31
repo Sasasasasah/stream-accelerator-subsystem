@@ -42,7 +42,7 @@ module tb_sr_leaf_cell_semantic;
     assign fabric_valid_out = fabric_direction ?
         west_fabric_valid_out : east_fabric_valid_out;
 
-    ftlpu_sr_superlane_col_dir #(
+    stream_sr_superlane_col_dir #(
         .P_STREAMS_PER_DIR(STREAM_NUM),
         .P_LANES_PER_SUPERLANE(LANE_NUM),
         .P_SR_DATA_BITS(DATA_BITS),
@@ -64,7 +64,7 @@ module tb_sr_leaf_cell_semantic;
         .invalid_consume_o(invalid_consume_o)
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),
@@ -89,7 +89,7 @@ module tb_sr_leaf_cell_semantic;
         .state_valid_out()
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),

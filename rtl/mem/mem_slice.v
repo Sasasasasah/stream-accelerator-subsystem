@@ -87,7 +87,7 @@ module mem_slice #(
     initial begin
         if (P_BANKS != 2 || P_TILE_ROWS != 4 ||
             P_STREAMS_PER_DIRECTION != 32 || P_SEGMENT_BITS != 64) begin
-            $display("ERROR mem_slice supports the FTLPU_DEFAULT_4T8L profile only");
+            $display("ERROR mem_slice supports the STREAM_ACCEL_DEFAULT_4T8L profile only");
             $finish;
         end
     end

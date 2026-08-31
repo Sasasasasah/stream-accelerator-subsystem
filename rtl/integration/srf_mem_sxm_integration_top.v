@@ -318,7 +318,7 @@ module srf_mem_sxm_integration_top #(
         end
     endgenerate
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .P_HEMISPHERES(P_HEMISPHERES),
         .SR_COLUMNS_PER_HEMI(P_SR_COLUMNS),
         .P_SUPERLANES_PER_COLUMN(P_SUPERLANES),

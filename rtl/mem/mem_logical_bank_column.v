@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-// IMPLEMENTATION CHOICE / INTERNAL INTEGRATION INTERFACE:
+// IMPLEMENTATION CHOICE / INTEGRATION INTERFACE:
 // one logical bank composed of four independent single-port SRAM leaves and
 // one independent command pipeline. This wrapper adds no storage beyond those
 // five child blocks and performs no bank-global arbitration.

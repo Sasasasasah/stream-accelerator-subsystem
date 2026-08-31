@@ -4,7 +4,7 @@
 // Packed path order is [hemisphere][direction], where hemisphere 0 is WEST,
 // hemisphere 1 is EAST, direction 0 is Eastward, and direction 1 is Westward.
 // The wrapper contains no payload/valid state and adds no pipeline cycle.
-module ftlpu_sr_fabric #(
+module stream_sr_fabric #(
     parameter P_HEMISPHERES               = 2,
     parameter SR_COLUMNS_PER_HEMI          = 16,
     parameter P_SUPERLANES_PER_COLUMN      = 4,
@@ -73,7 +73,7 @@ module ftlpu_sr_fabric #(
     localparam integer EAST_HEMI_EAST_PATH = 2;
     localparam integer EAST_HEMI_WEST_PATH = 3;
 
-    ftlpu_sr_hemisphere_fabric #(
+    stream_sr_hemisphere_fabric #(
         .SR_COLUMNS_PER_HEMI         (SR_COLUMNS_PER_HEMI),
         .P_SUPERLANES_PER_COLUMN     (P_SUPERLANES_PER_COLUMN),
         .P_STREAMS_PER_DIR           (P_STREAMS_PER_DIR),
@@ -109,7 +109,7 @@ module ftlpu_sr_fabric #(
         .hemisphere_collision(), .hemisphere_invalid_consume()
     );
 
-    ftlpu_sr_hemisphere_fabric #(
+    stream_sr_hemisphere_fabric #(
         .SR_COLUMNS_PER_HEMI         (SR_COLUMNS_PER_HEMI),
         .P_SUPERLANES_PER_COLUMN     (P_SUPERLANES_PER_COLUMN),
         .P_STREAMS_PER_DIR           (P_STREAMS_PER_DIR),

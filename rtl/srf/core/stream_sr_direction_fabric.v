@@ -3,7 +3,7 @@
 // One fixed-topology SRF direction. DIRECTION is an elaboration parameter:
 // 0 selects Eastward column 0 -> N-1; 1 selects Westward column N-1 -> 0.
 // Every column contains one registered leaf hop and this wrapper owns no state.
-module ftlpu_sr_direction_fabric #(
+module stream_sr_direction_fabric #(
     parameter SR_COLUMNS_PER_HEMI       = 16,
     parameter P_SUPERLANES_PER_COLUMN   = 4,
     parameter P_STREAMS_PER_DIR         = 32,
@@ -75,7 +75,7 @@ module ftlpu_sr_direction_fabric #(
             assign column_valid_in_bus[column*COLUMN_VALID_WIDTH +: COLUMN_VALID_WIDTH] =
                 DIRECTION ? west_valid_source : east_valid_source;
 
-            ftlpu_sr_column_dir #(
+            stream_sr_column_dir #(
                 .P_SUPERLANES_PER_COLUMN (P_SUPERLANES_PER_COLUMN),
                 .P_STREAMS_PER_DIR       (P_STREAMS_PER_DIR),
                 .P_LANES_PER_SUPERLANE   (P_LANES_PER_SUPERLANE),

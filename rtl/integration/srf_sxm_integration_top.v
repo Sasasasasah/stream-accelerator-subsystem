@@ -82,7 +82,7 @@ module srf_sxm_integration_top #(
     wire [P_SRF_INJECT_BITS-1:0] srf_inject_valid;
     wire [P_SRF_INJECT_BITS*P_DATA_BITS-1:0] srf_inject_data;
 
-    ftlpu_sr_fabric #(
+    stream_sr_fabric #(
         .P_HEMISPHERES(P_HEMISPHERES),
         .SR_COLUMNS_PER_HEMI(P_COLUMNS),
         .P_SUPERLANES_PER_COLUMN(P_SUPERLANES),

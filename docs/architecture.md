@@ -22,7 +22,7 @@ MEM is attached to SRF through local producer/consumer slot 0. MEM read operatio
 
 ## SXM Attachment
 
-SXM consumes stream segments from SRF and returns transformed segments through local producer/consumer slot 1. SXM supports transpose and permute operations. The East SXM input reads sreg14, and the West SXM input reads sreg15.
+SXM consumes stream segments from SRF and returns transformed segments through local producer/consumer slot 1. SXM supports transpose and permute operations. In the current prototype topology, the East and West inputs use fixed attachment columns 14 and 15 respectively. These attachment columns are configuration-specific examples, not a requirement of the general SRF concept.
 
 ## Producer and Consumer Slots
 

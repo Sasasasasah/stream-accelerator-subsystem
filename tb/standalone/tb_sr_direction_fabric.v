@@ -25,7 +25,7 @@ module tb_sr_direction_fabric;
     assign stream_data_out = direction ? west_data_out : east_data_out;
     assign stream_valid_out = direction ? west_valid_out : east_valid_out;
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),
@@ -45,7 +45,7 @@ module tb_sr_direction_fabric;
         .state_data_out(), .state_valid_out()
     );
 
-    ftlpu_sr_direction_fabric #(
+    stream_sr_direction_fabric #(
         .SR_COLUMNS_PER_HEMI(COLUMN_NUM),
         .P_SUPERLANES_PER_COLUMN(SUPERLANE_NUM),
         .P_STREAMS_PER_DIR(STREAM_NUM),

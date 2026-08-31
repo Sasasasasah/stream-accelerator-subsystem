@@ -4,7 +4,7 @@
 // payload state. A cell is selected by [stream][lane] and contains
 // P_SR_DATA_BITS
 // of data plus one valid bit.
-module ftlpu_sr_superlane_col_dir #(
+module stream_sr_superlane_col_dir #(
     parameter P_STREAMS_PER_DIR       = 32,
     parameter P_LANES_PER_SUPERLANE   = 8,
     parameter P_SR_DATA_BITS          = 8,
