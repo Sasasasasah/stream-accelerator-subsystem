@@ -59,19 +59,30 @@ SRF is a statically scheduled stream fabric with deterministic East/West propaga
 | SXM -> SRF output boundary | PASS |
 | MEM -> SRF -> SXM -> SRF full loopback E2E | PASS |
 
-## Quick Start
+## Quick Regression
 
 The RTL regression is intended for Windows with Icarus Verilog (`iverilog` and `vvp`). From the repository root, run:
+
+```bat
+scripts\run_quick_regression.bat
+```
+
+Designed for fast portfolio / development sanity checking, it runs short runtime
+integration tests and compile/elaboration checks for the heavier full-topology
+paths.
+
+```text
+QUICK REGRESSION PASS
+```
+
+## Extended Regression
 
 ```bat
 scripts\run_personal_regression.bat
 ```
 
-The script runs the combined integration regression and the full-loopback E2E regression, then prints:
-
-```text
-STREAM_ACCELERATOR_SUBSYSTEM TEST_PASS
-```
+Runs the full-topology combined and loopback simulations and can take
+significantly longer under event-driven simulation.
 
 C++ reference models are included under `cmodel/` for architectural cross-checking. This repository currently provides no single public CModel regression entry point.
 
@@ -98,3 +109,8 @@ This is an RTL/C++ architecture prototype for statically scheduled stream moveme
 ## Relationship to Standalone Repositories
 
 This repository is a self-contained integration snapshot of the SRF, memory, and transpose/permute blocks used for subsystem-level verification. Standalone repositories focus on individual blocks; this repository focuses on integration and end-to-end behavior. It intentionally does not use Git submodules.
+
+Comprehensive block-level verification is maintained in the standalone
+repositories: `stream-register-fabric`, `stream-oriented-memory`, and
+`stream-transpose-permute-engine`. This subsystem repository focuses on
+integration and end-to-end behavior.
